@@ -2,22 +2,46 @@ import React, { useState } from "react";
 import "./styles.css";
 
 export const App = () => {
-  const [inpompleteTodos, setIncompleteTodos] = useState(["1", "2"]);
+  const [todoText, setTodoText] = useState("");
+  const [incompleteTodos, setIncompleteTodos] = useState(["1", "2"]);
+  const [completeTodos, setCompleteTodos] = useState(["3", "4"]);
+
+  const onChangeTodoText = (event) => {
+    setTodoText(event.target.value);
+  };
+
+  const onClickAdd = () => {
+    if (todoText === "") return;
+    const newTodos = [...incompleteTodos, todoText];
+    setIncompleteTodos(newTodos);
+    setTodoText("");
+  };
+
+  const onClickDelete = (index) => {
+    const newTodos = [...incompleteTodos];
+
+    alert(index);
+  };
+
   return (
     <>
       <div className="input-area">
-        <input placeholder="TODOを入力" />
-        <button>追加</button>
+        <input
+          placeholder="TODOを入力"
+          value={todoText}
+          onChange={onChangeTodoText}
+        />
+        <button onClick={onClickAdd}>追加</button>
       </div>
       <div className="incomplete-area">
         <p className="title">未完了のTODO</p>
         <ul>
-          {inpompleteTodos.map((todo) => {
+          {incompleteTodos.map((todo, index) => {
             return (
-              <div className="list-row">
+              <div key={todo} className="list-row">
                 <li>{todo}</li>
                 <button>完了</button>
-                <button>削除</button>
+                <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
             );
           })}
@@ -26,11 +50,15 @@ export const App = () => {
       <div className="complete-area">
         <p className="title">完了済のTODO</p>
         <ul>
-          <div className="list-row">
-            <li>3</li>
-            <button>完了</button>
-            <button>削除</button>
-          </div>
+          {completeTodos.map((todo) => {
+            return (
+              <div key={todo} className="list-row">
+                <li>{todo}</li>
+                <button>完了</button>
+                <button>削除</button>
+              </div>
+            );
+          })}
         </ul>
       </div>
     </>
